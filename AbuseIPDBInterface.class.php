@@ -34,6 +34,42 @@ class AbuseIPDBInterface
 
 
     /**
+     * Report here a suspicious IP address
+     * @param string $IPToBan The IP you want to report to abuseIPDB
+     * @param array $categories Optionnal array containing categories of reasons why you report this IP (more here : https://www.abuseipdb.com/categories)
+     * @param string $comment Optionnal comment. STRIP ANY PERSONALLY IDENTIFIABLE INFORMATION (PPI). ABUSEIPDB IS NOT RESPONSIBLE FOR PPI YOU REVEAL... NOR AM I...
+     * @return bool|string|void
+     */
+    public function reportIP($IPToBan='', array $categories=array(), $comment='') {
+        if (filter_var($IPToBan, FILTER_VALIDATE_IP) && $this->apiKey!='') {
+            // Works using POST : https://docs.abuseipdb.com/?php#report-endpoint
+            $postdata = http_build_query(
+                array(
+                    'ip' => $IPToBan,
+                    'categories' => implode(",", $categories),
+                    'comment' => ''
+                )
+            );
+
+            // CURL request.
+            $headers =  array('Key: ' . $this->apiKey, 'Accept: application/json');
+            $curlRequest = curl_init("https://api.abuseipdb.com/api/v2/report");
+            curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, 1 ); // Set to 0 for testing to display response from AbuseIPDB
+            curl_setopt($curlRequest, CURLOPT_POST,           1 );
+            curl_setopt($curlRequest, CURLOPT_POSTFIELDS, $postdata);
+            curl_setopt($curlRequest, CURLOPT_HTTPHEADER, $headers);
+
+            if(curl_error($curlRequest)) {
+                return;
+            }
+            $output=curl_exec($curlRequest);
+            curl_close($curlRequest);
+            return $output;
+        }
+    }
+
+
+    /**
      * Grab the freshest blacklist from ABuseIPDB.
      * @param int $confidenceMinimum The minimal confidence that abuseIPDB has in the information (100=sure)
      * @return bool|string A list of bad IP you should blacklist (in a json object in our case).
@@ -102,9 +138,6 @@ class AbuseIPDBInterface
         return $IPdata;
     }
 
-    public function reportIP($IPToCheck) {
-
-    }
 
 
     public function checkBlock() {

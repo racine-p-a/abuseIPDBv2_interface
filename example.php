@@ -22,14 +22,24 @@ ini_set("display_errors", 1);
 require_once dirname(__FILE__) . '/AbuseIPDBInterface.class.php';
 
 // First let's check an eventual suspicious IP.
+echo '<h1>Informations about IP :</h1>';
 $IPWeWantToCheck = '118.25.6.39';
 $maxAgeInDays = 90;
 $informationsOnThisIP = new AbuseIPDBInterface();
-//var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
+var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
 
 // Now, we would like to get the last fresh blacklist
+echo '<h1>The freshest blacklist to import :</h1>';
 $confidenceMinimum = 90;
 $blackList = new AbuseIPDBInterface();
-//var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
+var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
 
+// A bad IP has been seen on your website. Report it.
+echo '<h1>Reporting an IP :</h1>';
+$IPToBan = '181.169.169.239';
+// An array of attack categories. See the list here : https://www.abuseipdb.com/categories
+$categories = array(15, 21);
+$comment = 'web attack';
+$blackList = new AbuseIPDBInterface();
+var_dump($informationsOnThisIP->reportIP($IPToBan, $categories, $comment));
 
