@@ -1,11 +1,14 @@
 <?php
 /**
  * INTERFACE FOR NEW VERSION OF ABUSEIPDB API.
+ * Project : abuseIPDBv2_interfcae
  * @author  Pierre-Alexandre RACINE <patcha.dev at{@} gmail dot[.] com>
  * @copyright Pierre-Alexandre RACINE <patcha.dev at{@} gmail dot[.] com>
  * @date 23/11/19 22:32
  *
  * @link https://github.com/racine-p-a/abuseIPDBv2_interfcae
+ *
+ * todo make a license
  */
 
 error_reporting(E_ALL);
@@ -30,7 +33,11 @@ class AbuseIPDBInterface
     }
 
     public function checkIP($IPToCheck='') {
+        $data = array();
 
+
+
+        return $data;
     }
 
     public function reportIP($IPToCheck) {
