@@ -34,6 +34,50 @@ class AbuseIPDBInterface
 
 
     /**
+     * Check all IP adress inside a network (using a CIDR notation)
+     * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
+     * @param string $networkToCheck A network of IP represented using the CIDR notation (127.0.0.1/24)
+     * @param int $maxAge The maximal age of reports taken in account.
+     * @return bool|string
+     */
+    public function checkBlock($networkToCheck='', $maxAge=30) {
+        $blockDetails = '';
+        $networkDetails = explode('/', $networkToCheck);
+
+        // Works using GET : https://docs.abuseipdb.com/?php#check-endpoint
+        if (
+            count($networkDetails) == 2 && // Exactly two parts in the network notation.
+            filter_var($networkDetails[0], FILTER_VALIDATE_IP) // First part is a correct IP address.
+            && intval($networkDetails[1] > 0) // Second part is an integer
+            && ($this->apiKey != '')
+        ) {
+
+            // URI construction
+            $uri = 'https://api.abuseipdb.com/api/v2/check-block?network=' . urlencode($networkToCheck);
+            if(intval($maxAge) > 0) {
+                $uri .= '&maxAgeInDays=' . intval($maxAge);
+            }
+
+            // CURL request
+            $headers =  array('Key: ' . $this->apiKey, 'Accept: application/json');
+
+            $curlRequest = curl_init($uri);
+            curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlRequest, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curlRequest, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlRequest, CURLOPT_HTTPHEADER, $headers);
+
+            if(curl_error($curlRequest)) {
+                return $blockDetails;
+            }
+            $blockDetails=curl_exec($curlRequest);
+            curl_close($curlRequest);
+        }
+        return $blockDetails;
+    }
+
+
+    /**
      * Report here a suspicious IP address
      * @param string $IPToBan The IP you want to report to abuseIPDB
      * @param array $categories Optionnal array containing categories of reasons why you report this IP (more here : https://www.abuseipdb.com/categories)
@@ -47,7 +91,7 @@ class AbuseIPDBInterface
                 array(
                     'ip' => $IPToBan,
                     'categories' => implode(",", $categories),
-                    'comment' => ''
+                    'comment' => $comment
                 )
             );
 
@@ -139,10 +183,6 @@ class AbuseIPDBInterface
     }
 
 
-
-    public function checkBlock() {
-
-    }
 
     public function bulkReport() {
 

@@ -43,3 +43,9 @@ $comment = 'web attack';
 $blackList = new AbuseIPDBInterface();
 var_dump($informationsOnThisIP->reportIP($IPToBan, $categories, $comment));
 
+// What about chacking an entire network ?
+echo '<h1>Check an entire network :</h1>';
+$networkToCheck = '127.0.0.1/24'; // Use the CIDR notation (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
+$maxAgeInDays = 15;
+$informationsOnThisIP = new AbuseIPDBInterface();
+var_dump($informationsOnThisIP->checkBlock($networkToCheck, $maxAgeInDays));

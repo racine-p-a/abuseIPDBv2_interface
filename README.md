@@ -42,7 +42,7 @@ var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
 
 ### Report an IP
 
-More informations [here](https://docs.abuseipdb.com/?php#report-endpoint).
+More informations [here](https://docs.abuseipdb.com/?php#check-block-endpoint).
 
 ```php
 require_once 'path/to/AbuseIPDBInterface.class.php';
@@ -54,4 +54,33 @@ $categories = array(15, 21);
 $comment = 'web attack';
 $blackList = new AbuseIPDBInterface();
 var_dump($informationsOnThisIP->reportIP($IPToBan, $categories, $comment));
+```
+
+### Check an entire network (using CIDR notation)
+
+More informations [here](https://docs.abuseipdb.com/?php#check-endpoint).
+
+More about the [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
+
+```php
+require_once 'path/to/AbuseIPDBInterface.class.php';
+$networkToCheck = '127.0.0.1/24'; // Use the CIDR notation (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
+$maxAgeInDays = 15;
+$informationsOnThisNetwork = new AbuseIPDBInterface();
+var_dump($informationsOnThisIP->checkBlock($networkToCheck, $maxAgeInDays));
+```
+
+
+## Frequent problems
+
+***When doing a check-block, i get an error. Why ?***
+
+You are looking for too much information with a free account.
+[See](https://docs.abuseipdb.com/?php#check-block-limits) :
+
+```text
+Due to the depth & breath of the these searches, the range of the parameters is capped by plan tier.
+
+For most use cases, /24 is enough to an entire network. Many autonomous systems will sometimes have blocks
+of /20. Some of the largest autonomous systems will have blocks of /18 or /17.
 ```
