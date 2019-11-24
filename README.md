@@ -18,5 +18,6 @@ The file example.php contains multiple examples but here are some of them :
 ```php
 require_once 'path/to/AbuseIPDBInterface.class.php';
 $informationsOnThisIP = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->checkIP('118.25.6.39', 90));
+// Parameters are : « IP to check », « max age in days » (integer optional), « verbose mode ? » (boolean optional)
+var_dump($informationsOnThisIP->checkIP('118.25.6.39', 90, 1));
 ```
