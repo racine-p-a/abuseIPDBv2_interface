@@ -22,7 +22,7 @@ class AbuseIPDBInterface
      *
      * @var string Your AbuseIPDB user key
      */
-    private $apiKey = 'PUT_YOUT_API_KEY_HERE';
+    private $apiKey = '128b87698b58fb8be1861c9959a6896b2cbfd97494a5baa58f5a7a0d4e46afbff8c824cd48cb3c99';
 
     /**
      * AbuseIPDBInterface constructor.
@@ -32,12 +32,34 @@ class AbuseIPDBInterface
 
     }
 
-    public function checkIP($IPToCheck='') {
-        $data = array();
+    public function checkIP($IPToCheck='', $maxAge=0) {
+        $IPdata = array();
 
+        // Works using GET : https://docs.abuseipdb.com/?php#check-endpoint
+        if (filter_var($IPToCheck, FILTER_VALIDATE_IP) && ($this->apiKey != '')) {
 
+            // URI construction
+            $uri = 'https://api.abuseipdb.com/api/v2/check?ipAddress=' . urlencode($IPToCheck);
+            if(intval($maxAge) > 0) {
+                $uri .= '&maxAgeInDays=' . intval($maxAge);
+            }
 
-        return $data;
+            // CURL request
+            $headers =  array('Key: ' . $this->apiKey, 'Accept: application/json');
+
+            $curlRequest = curl_init($uri);
+            curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlRequest, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curlRequest, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curlRequest, CURLOPT_HTTPHEADER, $headers);
+
+            if(curl_error($curlRequest)) {
+                return $IPdata;
+            }
+            $IPdata=curl_exec($curlRequest);
+            curl_close($curlRequest);
+        }
+        return $IPdata;
     }
 
     public function reportIP($IPToCheck) {

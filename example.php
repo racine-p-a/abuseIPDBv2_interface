@@ -10,6 +10,9 @@
  * * todo make a license
  */
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 /*
  * Here are some examples of simple usecases for the abuseIPDB interface
  *
@@ -17,7 +20,11 @@
  */
 
 require_once dirname(__FILE__) . '/AbuseIPDBInterface.class.php';
+
 // First let's check an eventual suspicious IP.
-$IPWeWantToCheck = '54.36.246.232';
+$IPWeWantToCheck = '118.25.6.39';
+$maxAgeInDays = 90;
 $informationsOnThisIP = new AbuseIPDBInterface();
-$informationsOnThisIP = $informationsOnThisIP->checkIP($IPWeWantToCheck);
+var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays));
+
+
