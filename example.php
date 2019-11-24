@@ -25,6 +25,11 @@ require_once dirname(__FILE__) . '/AbuseIPDBInterface.class.php';
 $IPWeWantToCheck = '118.25.6.39';
 $maxAgeInDays = 90;
 $informationsOnThisIP = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
+//var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
+
+// Now, we would like to get the last fresh blacklist
+$confidenceMinimum = 90;
+$blackList = new AbuseIPDBInterface();
+//var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
 
 

@@ -15,9 +15,24 @@ your API key in the file « AbuseIPDBInterface.class.php » before importing
 
 The file example.php contains multiple examples but here are some of them :
 
+### Check an IP adress
+
+More informations [here](https://docs.abuseipdb.com/?php#check-endpoint).
+
 ```php
 require_once 'path/to/AbuseIPDBInterface.class.php';
 $informationsOnThisIP = new AbuseIPDBInterface();
 // Parameters are : « IP to check », « max age in days » (integer optional), « verbose mode ? » (boolean optional)
 var_dump($informationsOnThisIP->checkIP('118.25.6.39', 90, 1));
+```
+
+### Get the last blacklist
+
+More informations [here](https://docs.abuseipdb.com/?php#blacklist-endpoint).
+
+```php
+require_once 'path/to/AbuseIPDBInterface.class.php';
+$informationsOnThisIP = new AbuseIPDBInterface();
+// Paramater is : the minimum confidence that abuseIPDB has in its informations (100 = sure). 
+var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
 ```

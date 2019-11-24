@@ -32,8 +32,45 @@ class AbuseIPDBInterface
 
     }
 
+
+    /**
+     * Grab the freshest blacklist from ABuseIPDB.
+     * @param int $confidenceMinimum The minimal confidence that abuseIPDB has in the information (100=sure)
+     * @return bool|string A list of bad IP you should blacklist (in a json object in our case).
+     */
+    public function getBlacklist($confidenceMinimum=90) {
+        $blackList = '';
+
+        // Works using GET : https://docs.abuseipdb.com/?php#blacklist-endpoint
+        // URI construction
+        $uri = 'https://api.abuseipdb.com/api/v2/blacklist?confidenceMinimum=' . intval($confidenceMinimum);
+
+        // CURL request
+        $headers =  array('Key: ' . $this->apiKey, 'Accept: application/json');
+
+        $curlRequest = curl_init($uri);
+        curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlRequest, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curlRequest, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlRequest, CURLOPT_HTTPHEADER, $headers);
+
+        if(curl_error($curlRequest)) {
+            return $blackList;
+        }
+        $blackList=curl_exec($curlRequest);
+        curl_close($curlRequest);
+        return $blackList;
+    }
+
+    /**
+     * Check an API in the AbuseIPDB database and send back informations.
+     * @param string $IPToCheck The IP we want to check (IPV4 or IPV6 accepted)
+     * @param int $maxAge The age of the reports taken in account.
+     * @param int $verbose Verbose answer ?
+     * @return bool|string Informations about an IP from AbuseIPDB in a json object.
+     */
     public function checkIP($IPToCheck='', $maxAge=0, $verbose=0) {
-        $IPdata = array();
+        $IPdata = '';
 
         // Works using GET : https://docs.abuseipdb.com/?php#check-endpoint
         if (filter_var($IPToCheck, FILTER_VALIDATE_IP) && ($this->apiKey != '')) {
@@ -69,9 +106,6 @@ class AbuseIPDBInterface
 
     }
 
-    public function getBlacklist() {
-
-    }
 
     public function checkBlock() {
 
