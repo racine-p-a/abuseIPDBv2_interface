@@ -32,7 +32,7 @@ class AbuseIPDBInterface
 
     }
 
-    public function checkIP($IPToCheck='', $maxAge=0) {
+    public function checkIP($IPToCheck='', $maxAge=0, $verbose=0) {
         $IPdata = array();
 
         // Works using GET : https://docs.abuseipdb.com/?php#check-endpoint
@@ -42,6 +42,9 @@ class AbuseIPDBInterface
             $uri = 'https://api.abuseipdb.com/api/v2/check?ipAddress=' . urlencode($IPToCheck);
             if(intval($maxAge) > 0) {
                 $uri .= '&maxAgeInDays=' . intval($maxAge);
+            }
+            if(boolval($verbose) == 1) {
+                $uri .= '&verbose=' . boolval($verbose);
             }
 
             // CURL request

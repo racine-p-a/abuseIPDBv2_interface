@@ -25,6 +25,6 @@ require_once dirname(__FILE__) . '/AbuseIPDBInterface.class.php';
 $IPWeWantToCheck = '118.25.6.39';
 $maxAgeInDays = 90;
 $informationsOnThisIP = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays));
+var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
 
 
