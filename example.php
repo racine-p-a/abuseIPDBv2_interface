@@ -51,7 +51,7 @@ $informationsOnThisIP = new AbuseIPDBInterface();
 //var_dump($informationsOnThisIP->checkBlock($networkToCheck, $maxAgeInDays));
 
 // Finally, we would like to share on abuseIPDB a file of many reports we have made.
-echo '<h1>Report a bunch of IP</h1>';
-$completePathToYourReportFile='test.csv';
-$bulkReport = new AbuseIPDBInterface();
-var_dump($bulkReport->bulkReport($completePathToYourReportFile));
+//echo '<h1>Report a bunch of IP</h1>';
+//$completePathToYourReportFile='test.csv';
+//$bulkReport = new AbuseIPDBInterface();
+//var_dump($bulkReport->bulkReport($completePathToYourReportFile));

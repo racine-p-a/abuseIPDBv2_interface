@@ -33,7 +33,10 @@ class AbuseIPDBInterface
     }
 
 
-
+    /**
+     *
+     * @param string $pathToYourFile
+     */
     public function bulkReport($pathToYourFile='') {
         if (
             // Is the file accessible ?
