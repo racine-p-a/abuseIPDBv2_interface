@@ -70,6 +70,12 @@ $informationsOnThisNetwork = new AbuseIPDBInterface();
 var_dump($informationsOnThisIP->checkBlock($networkToCheck, $maxAgeInDays));
 ```
 
+## Questions
+
+***Is the bulk-report function going to be added soon ?***
+
+I tried but I give up. I can't figure out how to post correctly these reports to abuseIPDB. If someone is willing
+to help, he'll be welcome.
 
 ## Frequent problems
 

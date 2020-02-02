@@ -22,7 +22,9 @@ class AbuseIPDBInterface
      *
      * @var string Your AbuseIPDB user key
      */
-    private $apiKey = '128b87698b58fb8be1861c9959a6896b2cbfd97494a5baa58f5a7a0d4e46afbff8c824cd48cb3c99';
+    private $apiKey = '128b87698b58fb8be1861c9959a6896b2cbfd97494a5baa58f5a7a0d4e46afbff8c824cd48cb3c99'; // Remove and
+                                                                                                          // put yours
+                                                                                                          // here
 
     /**
      * AbuseIPDBInterface constructor.
@@ -34,8 +36,9 @@ class AbuseIPDBInterface
 
 
     /**
-     *
-     * @param string $pathToYourFile
+     * Not working method. AbuseIPDB seems to not get the file attached.
+     * HELP NEEDED.
+     * @param string $pathToYourFile Access path to the file you wan to send to abuseIPDB.
      */
     public function bulkReport($pathToYourFile='') {
         if (
@@ -50,13 +53,9 @@ class AbuseIPDBInterface
 
             $curl = curl_init("https://api.abuseipdb.com/api/v2/bulk-report");
 
-            $cfile = new CURLFILE($pathToYourFile, 'text/csv', 'reposrt.csv');
+            $cfile = new CURLFile($pathToYourFile, 'text/csv', 'csv');
             $data = array();
-//$data["TITLE"] = "$noteTitle";
-//$data["BODY"] = "$noteBody";
-//$data["LINK_SUBJECT_ID"] = "$orgID";
-//$data["LINK_SUBJECT_TYPE"] = "Organisation";
-            $data['FILE_ATTACHMENTS'] = $cfile;
+            $data['csv'] = $cfile;
 
             curl_setopt_array($curl, array(
                 CURLOPT_UPLOAD => 1,
@@ -69,11 +68,13 @@ class AbuseIPDBInterface
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_POST => true,
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => $data,
                 CURLOPT_HTTPHEADER => array(
                     'Key: ' . $this->apiKey,
                     "cache-control: no-cache",
+                    'Accept: application/json',
                     "content-type: multipart/form-data"
                 ),
             ));
