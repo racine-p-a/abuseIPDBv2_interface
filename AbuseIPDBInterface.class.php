@@ -33,6 +33,61 @@ class AbuseIPDBInterface
     }
 
 
+
+    public function bulkReport($pathToYourFile='') {
+        if (
+            // Is the file accessible ?
+            is_file($pathToYourFile) &&
+            is_readable($pathToYourFile)
+        ) {
+            // Works using POST : https://docs.abuseipdb.com/?php#bulk-report-endpoint
+
+
+            $fp = fopen($pathToYourFile, 'r');
+
+            $curl = curl_init("https://api.abuseipdb.com/api/v2/bulk-report");
+
+            $cfile = new CURLFILE($pathToYourFile, 'text/csv', 'reposrt.csv');
+            $data = array();
+//$data["TITLE"] = "$noteTitle";
+//$data["BODY"] = "$noteBody";
+//$data["LINK_SUBJECT_ID"] = "$orgID";
+//$data["LINK_SUBJECT_TYPE"] = "Organisation";
+            $data['FILE_ATTACHMENTS'] = $cfile;
+
+            curl_setopt_array($curl, array(
+                CURLOPT_UPLOAD => 1,
+                CURLOPT_INFILE => $fp,
+                CURLOPT_NOPROGRESS => false,
+                CURLOPT_BUFFERSIZE => 128,
+                CURLOPT_INFILESIZE => filesize($pathToYourFile),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    'Key: ' . $this->apiKey,
+                    "cache-control: no-cache",
+                    "content-type: multipart/form-data"
+                ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+                echo "cURL Error #:" . $err;
+            } else {
+                echo $response;
+            }
+        }
+    }
+
+
     /**
      * Check all IP adress inside a network (using a CIDR notation)
      * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
@@ -59,7 +114,10 @@ class AbuseIPDBInterface
             }
 
             // CURL request
-            $headers =  array('Key: ' . $this->apiKey, 'Accept: application/json');
+            $headers =  array(
+                'Key: ' . $this->apiKey,
+                'Accept: application/json'
+            );
 
             $curlRequest = curl_init($uri);
             curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, 1);
@@ -181,12 +239,4 @@ class AbuseIPDBInterface
         }
         return $IPdata;
     }
-
-
-
-    public function bulkReport() {
-
-    }
-
-
 }

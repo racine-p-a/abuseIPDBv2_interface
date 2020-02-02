@@ -26,13 +26,13 @@ echo '<h1>Informations about IP :</h1>';
 $IPWeWantToCheck = '118.25.6.39';
 $maxAgeInDays = 90;
 $informationsOnThisIP = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
+//var_dump($informationsOnThisIP->checkIP($IPWeWantToCheck, $maxAgeInDays, 1));
 
 // Now, we would like to get the last fresh blacklist
 echo '<h1>The freshest blacklist to import :</h1>';
 $confidenceMinimum = 90;
 $blackList = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
+//var_dump($informationsOnThisIP->getBlacklist($confidenceMinimum));
 
 // A bad IP has been seen on your website. Report it.
 echo '<h1>Reporting an IP :</h1>';
@@ -41,11 +41,17 @@ $IPToBan = '181.169.169.239';
 $categories = array(15, 21);
 $comment = 'web attack';
 $blackList = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->reportIP($IPToBan, $categories, $comment));
+//var_dump($informationsOnThisIP->reportIP($IPToBan, $categories, $comment));
 
-// What about chacking an entire network ?
+// What about checking an entire network ?
 echo '<h1>Check an entire network :</h1>';
 $networkToCheck = '127.0.0.1/24'; // Use the CIDR notation (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
 $maxAgeInDays = 15;
 $informationsOnThisIP = new AbuseIPDBInterface();
-var_dump($informationsOnThisIP->checkBlock($networkToCheck, $maxAgeInDays));
+//var_dump($informationsOnThisIP->checkBlock($networkToCheck, $maxAgeInDays));
+
+// Finally, we would like to share on abuseIPDB a file of many reports we have made.
+echo '<h1>Report a bunch of IP</h1>';
+$completePathToYourReportFile='test.csv';
+$bulkReport = new AbuseIPDBInterface();
+var_dump($bulkReport->bulkReport($completePathToYourReportFile));

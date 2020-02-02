@@ -6,7 +6,7 @@ This API contains absolutely no external library, no modules, no composer requir
 out-of-the-box. The only requirement is to use php_curl (do not worry : most web hosting - even mutualized
 ones - have it).
 
-The code is made with PHP7 (and might be compatible PHP5).
+The code is made with PHP7 (and might be compatible PHP5, feedbacks are welcome).
 
 It works with IPv4 and IPv6 addresses
 
